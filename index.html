@@ -64,40 +64,97 @@
   </body>
 
   <script>
-    const container = document.querySelector('.container');
+     const container = document.querySelector('.container');
     const addForm = document.querySelector('.add_form');
     const comments = document.querySelector('.comments')
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
+    
+    
+    const data = new Date();
+    const now = data.toLocaleString();
+
+    const info = [
+      {
+        name: 'Глеб Фокин',
+        date: '12.02.22 12:18',
+        comment: 'Это будет первый комментарий на этой странице',
+        like: '3',
+      },
+      {
+        name: 'Варвара Н.',
+        date: '13.02.22 19:22',
+        comment: 'Мне нравится как оформлена эта страница! ❤',
+        like: '75',
+      },
+    ];
+
+    const renderComment = () => {
+      const infoHtml = info.map((infoPeople) => {
+        return `<li class="comment">
+          <div class="comment-header">
+            <div>${infoPeople.name}</div>
+            <div>${infoPeople.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${infoPeople.comment}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${infoPeople.like}</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>`
+      }).join('');
+
+      comments.innerHTML = infoHtml;
+    };
+
+    renderComment();
+
+    function likesCounter() {
+      const likeButtons = document.querySelectorAll('.like-button');
+  const likes = document.querySelectorAll('.likes-counter');
+
+  likeButtons.forEach((likeButton, likeButtonId) => {
+    likeButton.onclick = function (event) {
+      console.log(likeButtonId)
+      if (likeButton.classList.contains('active-like')) {
+        likeButton.classList.remove('active-like');
+        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+      } else {
+        likeButton.classList.add('active-like')
+        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+      }
+    }
+  });
+}
+
+    likesCounter();
+
     button.addEventListener('click', function(event) {
         if (addFormName.value < 2) {
         alert('Пропишите свое имя. (Минимум 2 символа)')
-        return false
+        return false;
       } 
       if (addFormText.value < 2) {
         alert('Пропишите комментарий. (Минимум 2 символа)')
         return false;
       }
       else {
-        const oldListHtml = comments.innerHTML;
-     comments.innerHTML = oldListHtml + `<li class="comment">
-          <div class="comment-header">
-            <div>${addFormName.value}</div>
-            <div>01.01.2001</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${addFormText.value}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>`
+        info.push({
+          name: addFormName.value,
+          date: now,
+          comment: addFormText.value,
+          like: '0',
+        })
+
+        renderComment();
+        likesCounter()
       }
     });
   </script>
