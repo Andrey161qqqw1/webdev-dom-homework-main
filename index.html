@@ -64,17 +64,13 @@
   </body>
 
   <script>
-     const container = document.querySelector('.container');
+      const container = document.querySelector('.container');
     const addForm = document.querySelector('.add_form');
     const comments = document.querySelector('.comments')
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-    
-    
-    const data = new Date();
-    const now = data.toLocaleString();
-
+      
     const info = [
       {
         name: 'Глеб Фокин',
@@ -94,7 +90,7 @@
       const infoHtml = info.map((infoPeople) => {
         return `<li class="comment">
           <div class="comment-header">
-            <div>${infoPeople.name}</div>
+            <div class="name_people">${infoPeople.name}</div>
             <div>${infoPeople.date}</div>
           </div>
           <div class="comment-body">
@@ -117,12 +113,12 @@
     renderComment();
 
     function likesCounter() {
-      const likeButtons = document.querySelectorAll('.like-button');
+  const likeButtons = document.querySelectorAll('.like-button');
   const likes = document.querySelectorAll('.likes-counter');
 
   likeButtons.forEach((likeButton, likeButtonId) => {
     likeButton.onclick = function (event) {
-      console.log(likeButtonId)
+      event.stopPropagation();
       if (likeButton.classList.contains('active-like')) {
         likeButton.classList.remove('active-like');
         likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
@@ -136,18 +132,37 @@
 
     likesCounter();
 
+    function commentAndNameCopy() {
+      const namePeoples = document.querySelectorAll('.name_people');
+    const commentTexts = document.querySelectorAll('.comment-text');
+    const commentsBlock = document.querySelectorAll('.comment');
+    commentsBlock.forEach((commentBlock, commentBlockId) => {
+      commentBlock.addEventListener('click', function (event) {
+        event.stopPropagation();
+        addFormText.value = ('>' + commentTexts[commentBlockId].textContent + namePeoples[commentBlockId].textContent + ', ')
+      })
+    });
+    }
+
+    commentAndNameCopy();
+
     button.addEventListener('click', function(event) {
+      const data = new Date();
+      const now = data.toLocaleString();
         if (addFormName.value < 2) {
-        alert('Пропишите свое имя. (Минимум 2 символа)')
+        alert('Пропишите свое имя. (Минимум 1 символ)')
         return false;
       } 
       if (addFormText.value < 2) {
-        alert('Пропишите комментарий. (Минимум 2 символа)')
+        alert('Пропишите комментарий. (Минимум 1 символ)')
         return false;
       }
       else {
         info.push({
-          name: addFormName.value,
+          name: addFormName.value.replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
           date: now,
           comment: addFormText.value,
           like: '0',
@@ -155,6 +170,7 @@
 
         renderComment();
         likesCounter()
+        commentAndNameCopy();
       }
     });
   </script>
