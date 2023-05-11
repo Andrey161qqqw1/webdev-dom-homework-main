@@ -84,7 +84,7 @@
         date: '13.02.22 19:22',
         comment: 'Мне нравится как оформлена эта страница! ❤',
         like: '75',
-        likeStatus:'-active-like',
+        likeStatus:'.-active-like',
 
       },
     ];
@@ -122,11 +122,11 @@
   likeButtons.forEach((likeButton, likeButtonId) => {
     likeButton.onclick = function (event) {
       event.stopPropagation();
-      if (likeButton.classList.contains('active-like')) {
-        likeButton.classList.remove('active-like');
+      if (likeButton.classList.contains('-active-like')) {
+        likeButton.classList.remove('-active-like');
         likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
       } else {
-        likeButton.classList.add('active-like')
+        likeButton.classList.add('-active-like');
         likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
       }
     }
