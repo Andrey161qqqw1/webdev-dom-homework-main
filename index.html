@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
@@ -75,7 +75,7 @@
         name: 'Глеб Фокин',
         date: '12.02.22 12:18',
         comment: 'Это будет первый комментарий на этой странице',
-        like: '3',
+        like: 3,
         likeStatus:'',
 
       },
@@ -83,7 +83,7 @@
         name: 'Варвара Н.',
         date: '13.02.22 19:22',
         comment: 'Мне нравится как оформлена эта страница! ❤',
-        like: '75',
+        like: 75,
         likeStatus:'.-active-like',
 
       },
@@ -124,10 +124,13 @@
       event.stopPropagation();
       if (likeButton.classList.contains('-active-like')) {
         likeButton.classList.remove('-active-like');
-        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+        // likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+        info[likeButtonId].like -= 1;
+        likes[likeButtonId].innerHTML = info[likeButtonId].like;
       } else {
         likeButton.classList.add('-active-like');
-        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
+        info[likeButtonId].like += 1;
+        likes[likeButtonId].innerHTML = info[likeButtonId].like;
       }
     }
   });
@@ -168,7 +171,7 @@
         .replaceAll('"', "&quot;"),
           date: now,
           comment: addFormText.value,
-          like: '0',
+          like: '0', 
         })
 
         renderComment();
