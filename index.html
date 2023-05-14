@@ -111,6 +111,7 @@
       }).join('');
 
       comments.innerHTML = infoHtml;
+      likesCounter();
     };
 
     renderComment();
@@ -122,16 +123,19 @@
   likeButtons.forEach((likeButton, likeButtonId) => {
     likeButton.onclick = function (event) {
       event.stopPropagation();
-      if (likeButton.classList.contains('-active-like')) {
-        likeButton.classList.remove('-active-like');
+      if (info[likeButtonId].likeStatus) {
+
+       info[ikeButtonId].likeStatus = "";
         // likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
         info[likeButtonId].like -= 1;
-        likes[likeButtonId].innerHTML = info[likeButtonId].like;
+
       } else {
-        likeButton.classList.add('-active-like');
-        info[likeButtonId].like += 1;
-        likes[likeButtonId].innerHTML = info[likeButtonId].like;
+        info[likeButtonId].likeStatus = "-active-like";
+        likes[likeButtonId].like -=1;
       }
+      renderComment();
+    
+      likesCounter();
     }
   });
 }
@@ -170,7 +174,10 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;"),
           date: now,
-          comment: addFormText.value,
+          comment: addFormText.value.replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
           like: '0', 
         })
 
