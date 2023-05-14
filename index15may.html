@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body>
     <div class="container">
       <ul class="comments">
@@ -27,6 +28,7 @@
       </div>
     </div>
   </body>
+
   <script>
     const container = document.querySelector('.container');
     const addForm = document.querySelector('.add_form');
@@ -34,13 +36,11 @@
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-
-    fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments"),
     function getCommentsData() {
-      fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments"),
+      fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments",
     {
       method: "GET",
-    }.then((response) => {
+    }).then((response) => {
       const JsonResponse = response.json();
       const data = new Date();
       const now = data.toLocaleString();
@@ -61,16 +61,14 @@
     })
     }
 
-
-    let info = [];
     getCommentsData()
 
-
-  
+    let info = [];
 
     function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');
   const likes = document.querySelectorAll('.likes-counter');
+
   likeButtons.forEach((likeButton, likeButtonId) => {
     likeButton.onclick = function (event) {
       event.stopPropagation();
@@ -84,7 +82,9 @@
     }
   });
 }
+
 likesCounter();
+
     const renderComment = () => {
       const infoHtml = info.map((comment) => {
         return `<li class="comment">
@@ -105,8 +105,10 @@ likesCounter();
           </div>
         </li>`
       }).join("");
+
       comments.innerHTML = infoHtml;
     };
+
     function commentAndNameCopy() {
       const namePeoples = document.querySelectorAll('.name_people');
     const commentTexts = document.querySelectorAll('.comment-text');
@@ -137,14 +139,11 @@ likesCounter();
         fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments", {
         method: "POST",
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
-      }).then((response1) => {
-        response1.json().then((responseData1) => {
-          getCommentsData()
-          info = responseData1.comments
+      }).then(() => {
+        getCommentsData()
           renderComment();
           likesCounter();
           commentAndNameCopy();
-        });
       });
       }
     });
