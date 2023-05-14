@@ -1,48 +1,13 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-
   <body>
     <div class="container">
       <ul class="comments">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
       </ul>
       <div class="add-form">
         <input
@@ -62,7 +27,6 @@
       </div>
     </div>
   </body>
-
   <script>
     const container = document.querySelector('.container');
     const addForm = document.querySelector('.add_form');
@@ -70,78 +34,79 @@
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-    const info = [
-      {
-        name: 'Глеб Фокин',
-        date: '12.02.22 12:18',
-        comment: 'Это будет первый комментарий на этой странице',
-        like: 3,
-        likeStatus:'',
 
-      },
-      {
-        name: 'Варвара Н.',
-        date: '13.02.22 19:22',
-        comment: 'Мне нравится как оформлена эта страница! ❤',
-        like: 75,
-        likeStatus:'.-active-like',
+    fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments"),
+    function getCommentsData() {
+      fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments"),
+    {
+      method: "GET",
+    }.then((response) => {
+      const JsonResponse = response.json();
+      const data = new Date();
+      const now = data.toLocaleString();
+      JsonResponse.then((responseData => {
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: new Date(comment.date),
+            text: comment.text,
+            likes: comment.likes,
+          };
+        })
+        info = appComments;
+          renderComment();
+          likesCounter();
+          commentAndNameCopy();
+      }))
+    })
+    }
 
-      },
-    ];
 
-    const renderComment = () => {
-      const infoHtml = info.map((infoPeople) => {
-        return `<li class="comment">
-          <div class="comment-header">
-            <div class="name_people">${infoPeople.name}</div>
-            <div>${infoPeople.date}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${infoPeople.comment}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${infoPeople.like}</span>
-              <button class="like-button ${infoPeople.likeStatus}"></button>
-            </div>
-          </div>
-        </li>`
-      }).join('');
+    let info = [];
+    getCommentsData()
 
-      comments.innerHTML = infoHtml;
-      likesCounter();
-    };
 
-    renderComment();
+    let info = [];
 
     function likesCounter() {
   const likeButtons = document.querySelectorAll('.like-button');
   const likes = document.querySelectorAll('.likes-counter');
-
   likeButtons.forEach((likeButton, likeButtonId) => {
     likeButton.onclick = function (event) {
       event.stopPropagation();
-      if (info[likeButtonId].likeStatus) {
-
-       info[ikeButtonId].likeStatus = "";
-        // likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
-        info[likeButtonId].like -= 1;
-
+      if (likeButton.classList.contains('active-like')) {
+        likeButton.classList.remove('active-like');
+        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
       } else {
-        info[likeButtonId].likeStatus = "-active-like";
-        likes[likeButtonId].like -=1;
+        likeButton.classList.add('active-like')
+        likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML + 1;
       }
-      renderComment();
-    
-      likesCounter();
     }
   });
 }
-
-    likesCounter();
-
+likesCounter();
+    const renderComment = () => {
+      const infoHtml = info.map((comment) => {
+        return `<li class="comment">
+          <div class="comment-header">
+            <div class="name_people">${comment.name}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comment.text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.likes}</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>`
+      }).join("");
+      comments.innerHTML = infoHtml;
+    };
     function commentAndNameCopy() {
       const namePeoples = document.querySelectorAll('.name_people');
     const commentTexts = document.querySelectorAll('.comment-text');
@@ -153,9 +118,10 @@
       })
     });
     }
-
+    renderComment();
+    likesCounter();
     commentAndNameCopy();
-
+    
     button.addEventListener('click', function(event) {
       const data = new Date();
       const now = data.toLocaleString();
@@ -168,22 +134,18 @@
         return false;
       }
       else {
-        info.push({
-          name: addFormName.value.replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;"),
-          date: now,
-          comment: addFormText.value.replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;"),
-          like: '0', 
-        })
-
-        renderComment();
-        likesCounter()
-        commentAndNameCopy();
+        fetch("https://webdev-hw-api.vercel.app/api/v1/Andr161/comments", {
+        method: "POST",
+        body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
+      }).then((response1) => {
+        response1.json().then((responseData1) => {
+          getCommentsData()
+          info = responseData1.comments
+          renderComment();
+          likesCounter();
+          commentAndNameCopy();
+        });
+      });
       }
     });
   </script>
