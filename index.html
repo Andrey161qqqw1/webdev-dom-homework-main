@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
@@ -70,34 +70,120 @@
     const addFormName = document.querySelector('.add-form-name');
     const addFormText = document.querySelector('.add-form-text');
     const button = document.querySelector('.add-form-button');
-    button.addEventListener('click', function(event) {
-        if (addFormName.value < 2) {
-        alert('Пропишите свое имя. (Минимум 2 символа)')
-        return false
-      } 
-      if (addFormText.value < 2) {
-        alert('Пропишите комментарий. (Минимум 2 символа)')
-        return false;
-      }
-      else {
-        const oldListHtml = comments.innerHTML;
-     comments.innerHTML = oldListHtml + `<li class="comment">
+    const info = [
+      {
+        name: 'Глеб Фокин',
+        date: '12.02.22 12:18',
+        comment: 'Это будет первый комментарий на этой странице',
+        like: 3,
+        likeStatus:'',
+
+      },
+      {
+        name: 'Варвара Н.',
+        date: '13.02.22 19:22',
+        comment: 'Мне нравится как оформлена эта страница! ❤',
+        like: 75,
+        likeStatus:'.-active-like',
+
+      },
+    ];
+
+    const renderComment = () => {
+      const infoHtml = info.map((infoPeople) => {
+        return `<li class="comment">
           <div class="comment-header">
-            <div>${addFormName.value}</div>
-            <div>01.01.2001</div>
+            <div class="name_people">${infoPeople.name}</div>
+            <div>${infoPeople.date}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">
-              ${addFormText.value}
+              ${infoPeople.comment}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button"></button>
+              <span class="likes-counter">${infoPeople.like}</span>
+              <button class="like-button ${infoPeople.likeStatus}"></button>
             </div>
           </div>
         </li>`
+      }).join('');
+
+      comments.innerHTML = infoHtml;
+      likesCounter();
+    };
+
+    renderComment();
+
+    function likesCounter() {
+  const likeButtons = document.querySelectorAll('.like-button');
+  const likes = document.querySelectorAll('.likes-counter');
+
+  likeButtons.forEach((likeButton, likeButtonId) => {
+    likeButton.onclick = function (event) {
+      event.stopPropagation();
+      if (info[likeButtonId].likeStatus) {
+
+       info[ikeButtonId].likeStatus = "";
+        // likes[likeButtonId].innerHTML = +likes[likeButtonId].innerHTML - 1;
+        info[likeButtonId].like -= 1;
+
+      } else {
+        info[likeButtonId].likeStatus = "-active-like";
+        likes[likeButtonId].like -=1;
+      }
+      renderComment();
+    
+      likesCounter();
+    }
+  });
+}
+
+    likesCounter();
+
+    function commentAndNameCopy() {
+      const namePeoples = document.querySelectorAll('.name_people');
+    const commentTexts = document.querySelectorAll('.comment-text');
+    const commentsBlock = document.querySelectorAll('.comment');
+    commentsBlock.forEach((commentBlock, commentBlockId) => {
+      commentBlock.addEventListener('click', function (event) {
+        event.stopPropagation();
+        addFormText.value = ('>' + commentTexts[commentBlockId].textContent + namePeoples[commentBlockId].textContent + ', ')
+      })
+    });
+    }
+
+    commentAndNameCopy();
+
+    button.addEventListener('click', function(event) {
+      const data = new Date();
+      const now = data.toLocaleString();
+        if (addFormName.value < 2) {
+        alert('Пропишите свое имя. (Минимум 1 символ)')
+        return false;
+      } 
+      if (addFormText.value < 2) {
+        alert('Пропишите комментарий. (Минимум 1 символ)')
+        return false;
+      }
+      else {
+        info.push({
+          name: addFormName.value.replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
+          date: now,
+          comment: addFormText.value.replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;"),
+          like: '0', 
+        })
+
+        renderComment();
+        likesCounter()
+        commentAndNameCopy();
       }
     });
   </script>
