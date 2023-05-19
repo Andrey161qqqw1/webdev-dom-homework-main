@@ -70,11 +70,8 @@
           renderComment();
           likesCounter();
           commentAndNameCopy();
-      })).then(() => {
-        downloadGet.style.display = 'none';
-      })
-    })
-    }
+      }))
+    })    }
 
     getCommentsData()
 
@@ -157,14 +154,7 @@ likesCounter();
         fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {
         method: "POST",
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
-      }).then(() => {
-          getCommentsData()
-          renderComment();
-          likesCounter();
-          commentAndNameCopy();
-      }).then(() => {
-        
-      })
+      });
       }
     });
   </script>
