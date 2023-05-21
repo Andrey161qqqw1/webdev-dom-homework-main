@@ -16,10 +16,10 @@
       }
     </style>
     <div class="container">
-      <p class="download-GET">Подожди, я еще не загрузился, брат!</p>
+      <p class="download-GET">Подождите пожалуйсто, я еще не загрузился!</p>
       <ul class="comments">
       </ul>
-        <p class="download">Жди, жди, у меня тут куча информации, ее надо обработать!</p>
+        <p class="download">Подождите,уже обрабатываю, очень много информации!</p>
       <div class="add-form remove-div">
         <input
           type="text"
@@ -144,21 +144,35 @@ likesCounter();
     button.addEventListener('click', function(event) {
       const data = new Date();
       const now = data.toLocaleString();
-        if (addFormName.value < 2) {
-        alert('Пропишите свое имя. (Минимум 1 символ)')
-        return false;
-      } 
-      if (addFormText.value < 2) {
-        alert('Пропишите комментарий. (Минимум 1 символ)')
-        return false;
-      }
-      else {
-        download.style.display = 'block';
+       download.style.display = 'block';
         removeDiv.classList.add('delete-div');
         return fetch("https://webdev-hw-api.vercel.app/api/v1/MnogoYje/comments", {
         method: "POST",
         body: JSON.stringify({text: addFormText.value, name: addFormName.value,}),
-      }).then(() => {
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json ();
+        }
+
+       if (response.status === 400) {
+          alert ('Недостаточно символов,введите имя или коментарий не менее 4 символов');
+         throw new Error('НЕДОСТАТОЧНО СИМВОЛОВ!');
+       }
+
+
+         if (response.status === 500) {
+          alert ('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
+         throw new Error('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!'); 
+         } 
+         else {
+          alert('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');
+          throw new Error('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');  
+         }
+
+        })
+                              
+      .then(() => {
           return getCommentsData()
           renderComment();
           likesCounter();
@@ -166,8 +180,15 @@ likesCounter();
       }).then(() => {
         download.style.display = 'none';
         removeDiv.classList.remove('delete-div');
+      }).catch((error) => {
+         download.style.display = 'none';
+        removeDiv.classList.remove('delete-div');
+        console.warn(error);
       })
-      }
-    });
+     
+
+      
+    }
+    );
   </script>
 </html>
