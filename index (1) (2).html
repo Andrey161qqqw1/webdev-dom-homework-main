@@ -20,6 +20,7 @@
       <ul class="comments">
       </ul>
         <p class="download">Подождите,уже обрабатываю, очень много информации!</p>
+       <!--Подобные конструкции лучше оборачивать в тег <form>. Так и семантически правильнее, и намного легче обрабатывать форму, когда она заключена в едниую сущность-->
       <div class="add-form remove-div">
         <input
           type="text"
@@ -152,21 +153,21 @@ likesCounter();
       })
       .then((response) => {
         if (response.status === 201) {
-          return response.json ();
+          return response.json();
         }
 
        if (response.status === 400) {
-          alert ('Недостаточно символов,введите имя или коментарий не менее 4 символов');
+          // alert ('Недостаточно символов,введите имя или коментарий не менее 4 символов');
          throw new Error('НЕДОСТАТОЧНО СИМВОЛОВ!');
        }
 
 
          if (response.status === 500) {
-          alert ('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
+          // alert ('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
          throw new Error('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!'); 
          } 
          else {
-          alert('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');
+          // alert('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');
           throw new Error('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!');  
          }
 
@@ -178,16 +179,25 @@ likesCounter();
           likesCounter();
           commentAndNameCopy();
       }).then(() => {
+        addFormName.value = ''; // неочевидно, чистить ли инпуты при неуспешных запросах, сделал, что тольеко при успешнхы
+        addFormText.value = '';
         download.style.display = 'none';
         removeDiv.classList.remove('delete-div');
       }).catch((error) => {
+        if (error.message === 'НЕДОСТАТОЧНО СИМВОЛОВ!') {
+           alert ('Недостаточно символов,введите имя или коментарий не менее 4 символов');
+        }
+        else if (error.message === 'ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!') {
+           alert ('ПРОИЗОШЛА ОШИБКА СЕРВЕРА,ПОПРОБУЙТЕ ПОЗЖЕ!');
+        }
+        else {
+        alert('ПОСМОТРИТЕ,ЧТО ТО ПОШЛО НЕ ПО ПЛАНУ!'); // тебе не может прийти никакой респонс от сервера, если нет соединения, оно сразу в catch вылетает
+          
+        }
          download.style.display = 'none';
         removeDiv.classList.remove('delete-div');
         console.warn(error);
       })
-     
-
-      
     }
     );
   </script>
