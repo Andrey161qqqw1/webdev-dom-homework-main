@@ -32,8 +32,8 @@ export function renderAndLogin({ info, addFormName, formLoginValue }) {
       });
     } 
   const infoHtml = info.map((comment) => {
-    const now = comment.date;
-    const createDate = format(now, "yyyy-MM-dd HH:mm:ss");
+    const nowDate = comment.date;
+    const createDate = format(nowDate, "yyyy-MM-dd HH:mm:ss");
     return `<li class="comment">
       <div class="comment-header">
         <div class="name_people">${comment.name}</div>
