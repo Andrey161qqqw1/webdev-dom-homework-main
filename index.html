@@ -1,59 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Проект "Комменты"</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
+    <title>Instapro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./ui-kit.css" />
   </head>
 
   <body>
-    <style>
-      .download {
-        display: none;
-      }
-      .delete-div {
-        display: none;
-      }
-    </style>
-    <div class="container">
-      <p class="download-GET">Подожди, я еще не загрузился, брат!</p>
-      <ul class="comments">
-      </ul>
-        <p class="download">Жди, жди, у меня тут куча информации, ее надо обработать!</p>
-      <div class="add-form remove-div remove-for-login">
-        <input
-          type="text"
-          class="add-form-name"
-          placeholder="Введите ваше имя"
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text"
-          placeholder="Введите ваш коментарий"
-          rows="4"
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
-        </div>
-      </div>
-      <div class="add-form form_login remove-div">
-        <input
-          type="text"
-          class="add-form-name form_login_login"
-          placeholder="Логин"
-        />
-        <textarea
-          type="textarea"
-          class="add-form-text form_login_password"
-          placeholder="Введите ваш Пароль"
-          rows="4"
-        ></textarea>
-        <div class="add-form-row">
-          <button class="add-form-button add-login-button">Авторизоваться</button>
-        </div>
-       <p>Нет аккаунта?</p><a href="/">Зарегистрируйтесь</a>
-      </div>
+    <div id="app">
     </div>
-    <script src="./dist/main.js"></script>
   </body>
+  <script type="module" src="./index.js"></script>
 </html>
